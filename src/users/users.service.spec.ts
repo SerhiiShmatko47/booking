@@ -7,6 +7,7 @@ import * as bcrypt from 'bcryptjs'
 import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { Message } from '@common/types/message.types'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 describe('UsersService', () => {
     let usersService: UsersService
@@ -149,5 +150,49 @@ describe('UsersService', () => {
         await expect(usersService.findOne(userId)).rejects.toThrow(
             new HttpException('User not found', 404),
         )
+    })
+
+    it('should update the user and return a success message', async () => {
+        const userId = '1'
+        const updateUserDto: UpdateUserDto = {
+            phone: '0987654321',
+        }
+        const expectedMessage = { message: 'User updated successfully' }
+
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue({
+            id: userId,
+            phone: '1234567890',
+            name: 'John',
+            createdAt: new Date(),
+            password: 'password',
+        })
+        jest.spyOn(usersRepository, 'update').mockResolvedValue(undefined)
+
+        const result = await usersService.update(userId, updateUserDto)
+
+        expect(usersRepository.findOne).toHaveBeenCalledWith({
+            where: { id: userId },
+        })
+        expect(usersRepository.update).toHaveBeenCalledWith(
+            { id: userId },
+            updateUserDto,
+        )
+        expect(result).toEqual(expectedMessage)
+    })
+
+    it('should throw an exception when trying to update a non-existent user', async () => {
+        const userId = '1'
+        const updateUserDto: UpdateUserDto = {
+            phone: '1234567890',
+        }
+
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
+
+        await expect(
+            usersService.update(userId, updateUserDto),
+        ).rejects.toThrow(HttpException)
+        expect(usersRepository.findOne).toHaveBeenCalledWith({
+            where: { id: userId },
+        })
     })
 })
