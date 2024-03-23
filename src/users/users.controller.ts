@@ -141,6 +141,27 @@ export class UsersController {
         return this.usersService.update(userId, updateUserDto)
     }
 
+    @ApiOperation({ summary: 'Delete user' })
+    @ApiParam({
+        type: String,
+        name: 'userId',
+    })
+    @ApiOkResponse({
+        status: HttpStatus.OK,
+        schema: {
+            example: {
+                message: 'User deleted',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'User not found',
+            },
+        },
+    })
     @Delete(':userId')
     public async remove(@Param('userId') userId: string): Promise<Message> {
         return this.usersService.remove(userId)
