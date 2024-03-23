@@ -9,6 +9,7 @@ import {
     HttpStatus,
     HttpCode,
     Query,
+    UsePipes,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -24,6 +25,9 @@ import {
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity'
 import { Message } from '@common/types/message.types'
+import { CreateUserPipe } from '@common/pipe/create-user/create-user.pipe'
+import { UpdateUserPipe } from '@common/pipe/update-user/update-user.pipe'
+import { GetUsersPipe } from '@common/pipe/get-users/get-users.pipe'
 
 @Controller('users')
 export class UsersController {
@@ -51,6 +55,7 @@ export class UsersController {
     })
     @Post()
     @HttpCode(HttpStatus.CREATED)
+    @UsePipes(new CreateUserPipe())
     public async create(
         @Body() createUserDto: CreateUserDto,
     ): Promise<Message> {
@@ -79,6 +84,7 @@ export class UsersController {
         },
     })
     @Get()
+    @UsePipes(new GetUsersPipe())
     public async findAll(
         @Query('take') take: number,
         @Query('skip') skip: number,
@@ -133,6 +139,7 @@ export class UsersController {
         },
     })
     @Patch(':userId')
+    @UsePipes(new UpdateUserPipe())
     @HttpCode(HttpStatus.CREATED)
     public async update(
         @Param('userId') userId: string,
