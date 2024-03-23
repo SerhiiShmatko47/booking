@@ -125,4 +125,29 @@ describe('UsersService', () => {
     it('should throw an error when called with invalid arguments', async () => {
         await expect(usersService.findAll(-1, 0)).rejects.toThrowError()
     })
+
+    it('should return the user when it is found', async () => {
+        const userId = '123'
+        const user = {
+            id: userId,
+            name: 'John Doe',
+            phone: '1234567890',
+            createdAt: new Date(),
+            password: 'password',
+        }
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
+
+        const result = await usersService.findOne(userId)
+
+        expect(result).toEqual(user)
+    })
+
+    it('should throw an HttpException with status 404 when the user is not found', async () => {
+        const userId = '123'
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
+
+        await expect(usersService.findOne(userId)).rejects.toThrow(
+            new HttpException('User not found', 404),
+        )
+    })
 })
