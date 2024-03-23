@@ -22,6 +22,7 @@ import {
     ApiQuery,
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity'
+import { Message } from '@common/types/message.types'
 
 @Controller('users')
 export class UsersController {
@@ -49,7 +50,9 @@ export class UsersController {
     })
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    public create(@Body() createUserDto: CreateUserDto) {
+    public async create(
+        @Body() createUserDto: CreateUserDto,
+    ): Promise<Message> {
         return this.usersService.create(createUserDto)
     }
 
@@ -75,7 +78,10 @@ export class UsersController {
         },
     })
     @Get()
-    public findAll(@Query('take') take: number, @Query('skip') skip: number) {
+    public async findAll(
+        @Query('take') take: number,
+        @Query('skip') skip: number,
+    ): Promise<User[]> {
         return this.usersService.findAll(take, skip)
     }
 

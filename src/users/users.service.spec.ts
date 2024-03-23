@@ -9,7 +9,7 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { Message } from '@common/types/message.types'
 
 describe('UsersService', () => {
-    let service: UsersService
+    let usersService: UsersService
     let usersRepository: Repository<User>
 
     beforeEach(async () => {
@@ -23,7 +23,7 @@ describe('UsersService', () => {
             ],
         }).compile()
 
-        service = module.get<UsersService>(UsersService)
+        usersService = module.get<UsersService>(UsersService)
         usersRepository = module.get<Repository<User>>(getRepositoryToken(User))
     })
 
@@ -48,7 +48,7 @@ describe('UsersService', () => {
             message: 'User created successfully',
         }
 
-        expect(await service.create(createUserDto)).toEqual(result)
+        expect(await usersService.create(createUserDto)).toEqual(result)
     })
 
     it('should throw an error if the user already exists', async () => {
@@ -63,7 +63,7 @@ describe('UsersService', () => {
             createdAt: new Date(),
         })
 
-        await expect(service.create(createUserDto)).rejects.toThrow(
+        await expect(usersService.create(createUserDto)).rejects.toThrow(
             new HttpException('User already exists', 400),
         )
     })
@@ -85,8 +85,44 @@ describe('UsersService', () => {
         })
         jest.spyOn(usersRepository, 'save').mockResolvedValue(undefined)
 
-        await service.create(createUserDto)
+        await usersService.create(createUserDto)
 
         expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10)
+    })
+
+    it('should return an array of users when called with valid arguments', async () => {
+        const users: User[] = [
+            {
+                id: '1',
+                name: 'John',
+                phone: '1234567890',
+                createdAt: new Date(),
+                password: 'password',
+            },
+            {
+                id: '2',
+                name: 'Jane',
+                phone: '0987654321',
+                createdAt: new Date(),
+                password: 'password',
+            },
+        ]
+        jest.spyOn(usersRepository, 'find').mockResolvedValue(users)
+
+        const result = await usersService.findAll(2, 0)
+
+        expect(result).toEqual(users)
+    })
+
+    it('should return an empty array when called with arguments that result in no users being found', async () => {
+        jest.spyOn(usersRepository, 'find').mockResolvedValue([])
+
+        const result = await usersService.findAll(2, 0)
+
+        expect(result).toEqual([])
+    })
+
+    it('should throw an error when called with invalid arguments', async () => {
+        await expect(usersService.findAll(-1, 0)).rejects.toThrowError()
     })
 })
