@@ -17,8 +17,11 @@ import {
     ApiBadRequestResponse,
     ApiBody,
     ApiCreatedResponse,
+    ApiOkResponse,
     ApiOperation,
+    ApiQuery,
 } from '@nestjs/swagger'
+import { User } from './entities/user.entity'
 
 @Controller('users')
 export class UsersController {
@@ -50,9 +53,30 @@ export class UsersController {
         return this.usersService.create(createUserDto)
     }
 
+    @ApiOperation({ summary: 'Get all user' })
+    @ApiQuery({
+        type: Number,
+        name: 'take',
+    })
+    @ApiQuery({
+        type: Number,
+        name: 'skip',
+    })
+    @ApiOkResponse({
+        status: HttpStatus.CREATED,
+        type: [User],
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'take and skip must be numbers',
+            },
+        },
+    })
     @Get()
-    public findAll(@Query('take') cursor: number, @Query('skip') skip: number) {
-        return this.usersService.findAll(cursor, skip)
+    public findAll(@Query('take') take: number, @Query('skip') skip: number) {
+        return this.usersService.findAll(take, skip)
     }
 
     @Get(':id')

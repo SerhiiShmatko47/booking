@@ -43,10 +43,7 @@ export class UsersService {
      * @returns {Promise<User[]>} An array of users.
      */
     public async findAll(take: number, skip: number): Promise<User[]> {
-        const users = await this.usersRepository.find({
-            take,
-            skip,
-        })
+        const users = await this.usersRepository.find({ take, skip })
         return users
     }
 
