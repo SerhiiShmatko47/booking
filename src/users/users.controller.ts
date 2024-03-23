@@ -108,7 +108,32 @@ export class UsersController {
         return this.usersService.findOne(userId)
     }
 
+    @ApiOperation({ summary: 'Update user' })
+    @ApiParam({
+        type: String,
+        name: 'userId',
+    })
+    @ApiBody({
+        type: UpdateUserDto,
+    })
+    @ApiOkResponse({
+        status: HttpStatus.CREATED,
+        schema: {
+            example: {
+                message: 'User updated',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'User not found',
+            },
+        },
+    })
     @Patch(':userId')
+    @HttpCode(HttpStatus.CREATED)
     public async update(
         @Param('userId') userId: string,
         @Body() updateUserDto: UpdateUserDto,

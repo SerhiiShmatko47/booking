@@ -6,7 +6,6 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcryptjs'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@common/types/message.types'
-import { skip } from 'node:test'
 
 @Injectable()
 export class UsersService {
