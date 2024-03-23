@@ -108,12 +108,12 @@ export class UsersController {
         return this.usersService.findOne(userId)
     }
 
-    @Patch(':id')
-    public update(
-        @Param('id') id: string,
+    @Patch(':userId')
+    public async update(
+        @Param('userId') userId: string,
         @Body() updateUserDto: UpdateUserDto,
-    ) {
-        return this.usersService.update(+id, updateUserDto)
+    ): Promise<Message> {
+        return this.usersService.update(userId, updateUserDto)
     }
 
     @Delete(':id')

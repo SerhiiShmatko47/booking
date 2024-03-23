@@ -50,6 +50,7 @@ export class UsersService {
      * Returns a user by its ID.
      * @param {string} userId The ID of the user.
      * @returns {Promise<User>} The user found or undefined.
+     * @throws {HttpException} If the user is not found.
      */
     public async findOne(userId: string): Promise<User> {
         const user = await this.usersRepository.findOne({
@@ -59,8 +60,25 @@ export class UsersService {
         return user
     }
 
-    public update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`
+    /**
+     * Updates a user with the given ID using the provided data.
+     *
+     * @param {string} userId - The ID of the user to update.
+     * @param {UpdateUserDto} updateUserDto - The data to update the user with.
+     * @return {Promise<Message>} - A promise that resolves to an object with a success message.
+     * @throws {HttpException} - If the user with the given ID is not found.
+     */
+    public async update(
+        userId: string,
+        updateUserDto: UpdateUserDto,
+    ): Promise<Message> {
+        const user = await this.usersRepository.findOne({
+            where: { id: userId },
+        })
+        if (!user) throw new HttpException('User not found', 404)
+
+        await this.usersRepository.update({ id: userId }, updateUserDto)
+        return { message: 'User updated successfully' }
     }
 
     public remove(id: number) {
