@@ -15,9 +15,10 @@ export class UsersService {
     ) {}
 
     /**
-     * Create new user
-     * @param {CreateUserDto} createUserDto
-     * @returns {Promise<Message>}
+     * Creates a new user.
+     * @param {CreateUserDto} createUserDto Data used to create the user.
+     * @returns {Promise<Message>} A message indicating the user was created successfully.
+     * @throws {HttpException} If the user already exists.
      */
     public async create(createUserDto: CreateUserDto): Promise<Message> {
         const user = await this.usersRepository.findOne({
