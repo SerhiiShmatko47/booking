@@ -23,7 +23,7 @@ describe('GetUsersPipe', () => {
 
     it('should return the input value when value is a number', () => {
         const value = 123
-        const metadata: ArgumentMetadata = { type: 'query' }
+        const metadata: ArgumentMetadata = { type: 'query', metatype: Number }
         expect(getPipe.transform(value, metadata)).toBe(value)
     })
 })

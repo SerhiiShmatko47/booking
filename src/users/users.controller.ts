@@ -10,6 +10,8 @@ import {
     HttpCode,
     Query,
     UsePipes,
+    UseInterceptors,
+    ClassSerializerInterceptor,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -85,6 +87,7 @@ export class UsersController {
     })
     @Get()
     @UsePipes(new GetUsersPipe())
+    @UseInterceptors(ClassSerializerInterceptor)
     public async findAll(
         @Query('take') take: number,
         @Query('skip') skip: number,
@@ -110,6 +113,7 @@ export class UsersController {
         },
     })
     @Get(':userId')
+    @UseInterceptors(ClassSerializerInterceptor)
     public async findOne(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
     }
