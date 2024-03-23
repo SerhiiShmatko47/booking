@@ -10,6 +10,11 @@ import { Logger } from '@nestjs/common'
 import compression from '@fastify/compress'
 import helmet from '@fastify/helmet'
 import fastifyCsrf from '@fastify/csrf-protection'
+import {
+    DocumentBuilder,
+    SwaggerDocumentOptions,
+    SwaggerModule,
+} from '@nestjs/swagger'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -23,6 +28,19 @@ async function bootstrap() {
         contentSecurityPolicy: false,
     })
     await app.register(fastifyCsrf)
+
+    const config = new DocumentBuilder()
+        .setTitle('Booking')
+        .setDescription('The Booking API description')
+        .setVersion('1.0')
+        .build()
+
+    const options: SwaggerDocumentOptions = {
+        operationIdFactory: (_controllerKey: string, methodKey: string) =>
+            methodKey,
+    }
+    const document = SwaggerModule.createDocument(app, config, options)
+    SwaggerModule.setup('docs', app, document)
 
     const configService = app.get(ConfigService<IConfiguration>)
     const logger = new Logger(bootstrap.name)
