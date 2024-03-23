@@ -13,6 +13,9 @@ async function bootstrap() {
         AppModule,
         new FastifyAdapter(),
     )
+
+    app.enableCors()
+
     const configService = app.get(ConfigService<IConfiguration>)
     const logger = new Logger(bootstrap.name)
     const port = configService.get('PORT', { infer: true })
