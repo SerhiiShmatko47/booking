@@ -9,6 +9,7 @@ import { IConfiguration } from '@config/configuration'
 import { Logger } from '@nestjs/common'
 import compression from '@fastify/compress'
 import helmet from '@fastify/helmet'
+import fastifyCsrf from '@fastify/csrf-protection'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -21,6 +22,7 @@ async function bootstrap() {
     await app.register(helmet, {
         contentSecurityPolicy: false,
     })
+    await app.register(fastifyCsrf)
 
     const configService = app.get(ConfigService<IConfiguration>)
     const logger = new Logger(bootstrap.name)
