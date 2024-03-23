@@ -141,8 +141,8 @@ export class UsersController {
         return this.usersService.update(userId, updateUserDto)
     }
 
-    @Delete(':id')
-    public remove(@Param('id') id: string) {
-        return this.usersService.remove(+id)
+    @Delete(':userId')
+    public async remove(@Param('userId') userId: string): Promise<Message> {
+        return this.usersService.remove(userId)
     }
 }

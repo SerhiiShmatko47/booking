@@ -80,7 +80,17 @@ export class UsersService {
         return { message: 'User updated successfully' }
     }
 
-    public remove(id: number) {
-        return `This action removes a #${id} user`
+    /**
+     * Remove a user by their ID.
+     * @param {string} userId The ID of the user to be removed
+     * @return {Promise<Message>} An object containing a message indicating the success of the deletion
+     */
+    public async remove(userId: string): Promise<Message> {
+        const user = await this.usersRepository.findOne({
+            where: { id: userId },
+        })
+        if (!user) throw new HttpException('User not found', 404)
+        await this.usersRepository.delete({ id: userId })
+        return { message: 'User deleted successfully' }
     }
 }
