@@ -19,6 +19,7 @@ import {
     ApiCreatedResponse,
     ApiOkResponse,
     ApiOperation,
+    ApiParam,
     ApiQuery,
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity'
@@ -66,7 +67,7 @@ export class UsersController {
         name: 'skip',
     })
     @ApiOkResponse({
-        status: HttpStatus.CREATED,
+        status: HttpStatus.OK,
         type: [User],
     })
     @ApiBadRequestResponse({
@@ -85,6 +86,23 @@ export class UsersController {
         return this.usersService.findAll(take, skip)
     }
 
+    @ApiOperation({ summary: 'Get user by id' })
+    @ApiParam({
+        name: 'userId',
+        type: String,
+    })
+    @ApiOkResponse({
+        status: HttpStatus.OK,
+        type: User,
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'User not found',
+            },
+        },
+    })
     @Get(':userId')
     public async findOne(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
