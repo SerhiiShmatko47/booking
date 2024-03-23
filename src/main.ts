@@ -7,6 +7,7 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { IConfiguration } from '@config/configuration'
 import { Logger } from '@nestjs/common'
+import compression from '@fastify/compress'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -15,6 +16,7 @@ async function bootstrap() {
     )
 
     app.enableCors()
+    await app.register(compression, { encodings: ['gzip', 'deflate'] })
 
     const configService = app.get(ConfigService<IConfiguration>)
     const logger = new Logger(bootstrap.name)
