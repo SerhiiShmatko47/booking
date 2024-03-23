@@ -85,9 +85,9 @@ export class UsersController {
         return this.usersService.findAll(take, skip)
     }
 
-    @Get(':id')
-    public findOne(@Param('id') id: string) {
-        return this.usersService.findOne(+id)
+    @Get(':userId')
+    public async findOne(@Param('userId') userId: string): Promise<User> {
+        return this.usersService.findOne(userId)
     }
 
     @Patch(':id')

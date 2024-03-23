@@ -46,9 +46,17 @@ export class UsersService {
         const users = await this.usersRepository.find({ take, skip })
         return users
     }
-
-    public findOne(id: number) {
-        return `This action returns a #${id} user`
+    /**
+     * Returns a user by its ID.
+     * @param {string} userId The ID of the user.
+     * @returns {Promise<User>} The user found or undefined.
+     */
+    public async findOne(userId: string): Promise<User> {
+        const user = await this.usersRepository.findOne({
+            where: { id: userId },
+        })
+        if (!user) throw new HttpException('User not found', 404)
+        return user
     }
 
     public update(id: number, updateUserDto: UpdateUserDto) {
