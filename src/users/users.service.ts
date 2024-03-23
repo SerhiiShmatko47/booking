@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { Repository } from 'typeorm'
@@ -24,7 +24,11 @@ export class UsersService {
         const user = await this.usersRepository.findOne({
             where: { phone: createUserDto.phone },
         })
-        if (user) throw new HttpException('User already exists', 400)
+        if (user)
+            throw new HttpException(
+                'User already exists',
+                HttpStatus.BAD_REQUEST,
+            )
         const hashPassword = await bcrypt.hash(createUserDto.password, 10)
         const newUser = this.usersRepository.create({
             ...createUserDto,
@@ -55,7 +59,8 @@ export class UsersService {
         const user = await this.usersRepository.findOne({
             where: { id: userId },
         })
-        if (!user) throw new HttpException('User not found', 404)
+        if (!user)
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND)
         return user
     }
 
@@ -74,7 +79,8 @@ export class UsersService {
         const user = await this.usersRepository.findOne({
             where: { id: userId },
         })
-        if (!user) throw new HttpException('User not found', 404)
+        if (!user)
+            throw new HttpException('User not found', HttpStatus.NOT_FOUND)
 
         await this.usersRepository.update({ id: userId }, updateUserDto)
         return { message: 'User updated successfully' }
@@ -89,7 +95,8 @@ export class UsersService {
         const user = await this.usersRepository.findOne({
             where: { id: userId },
         })
-        if (!user) throw new HttpException('User not found', 404)
+        if (!user)
+            throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
         await this.usersRepository.delete({ id: userId })
         return { message: 'User deleted successfully' }
     }

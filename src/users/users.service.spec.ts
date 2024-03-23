@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { UsersService } from './users.service'
 import { Repository } from 'typeorm'
 import { CreateUserDto } from './dto/create-user.dto'
-import { HttpException } from '@nestjs/common'
+import { HttpException, HttpStatus } from '@nestjs/common'
 import * as bcrypt from 'bcryptjs'
 import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
@@ -194,5 +194,49 @@ describe('UsersService', () => {
         expect(usersRepository.findOne).toHaveBeenCalledWith({
             where: { id: userId },
         })
+    })
+
+    it('should throw an HttpException with status code 404 when the user is not found', async () => {
+        const userId = 'non-existent-user-id'
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
+        await expect(usersService.remove(userId)).rejects.toThrow(HttpException)
+        await expect(usersService.remove(userId)).rejects.toHaveProperty(
+            'status',
+            HttpStatus.BAD_REQUEST,
+        )
+    })
+
+    it('should delete the user with the specified ID from the repository', async () => {
+        const userId = 'existing-user-id'
+        const user = {
+            id: userId,
+            name: 'John',
+            phone: '1234567890',
+            password: 'password',
+            createdAt: new Date(),
+        }
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
+        jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)
+
+        await usersService.remove(userId)
+
+        expect(usersRepository.delete).toHaveBeenCalledWith({ id: userId })
+    })
+
+    it('should return an object with a message property set to "User deleted successfully"', async () => {
+        const userId = 'existing-user-id'
+        const user = {
+            id: userId,
+            name: 'John',
+            phone: '1234567890',
+            password: 'password',
+            createdAt: new Date(),
+        }
+        jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
+        jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)
+
+        const result = await usersService.remove(userId)
+
+        expect(result).toHaveProperty('message', 'User deleted successfully')
     })
 })
