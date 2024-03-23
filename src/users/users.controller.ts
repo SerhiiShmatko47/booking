@@ -6,16 +6,45 @@ import {
     Patch,
     Param,
     Delete,
+    HttpStatus,
+    HttpCode,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import {
+    ApiBadRequestResponse,
+    ApiBody,
+    ApiCreatedResponse,
+    ApiOperation,
+} from '@nestjs/swagger'
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    @ApiOperation({ summary: 'Create user' })
+    @ApiBody({
+        type: CreateUserDto,
+    })
+    @ApiCreatedResponse({
+        status: HttpStatus.CREATED,
+        schema: {
+            example: {
+                message: 'User created',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'User already exists',
+            },
+        },
+    })
     @Post()
+    @HttpCode(HttpStatus.CREATED)
     public create(@Body() createUserDto: CreateUserDto) {
         return this.usersService.create(createUserDto)
     }
