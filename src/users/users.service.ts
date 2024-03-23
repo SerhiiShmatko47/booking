@@ -6,6 +6,7 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcryptjs'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@common/types/message.types'
+import { skip } from 'node:test'
 
 @Injectable()
 export class UsersService {
@@ -35,8 +36,18 @@ export class UsersService {
         return { message: 'User created successfully' }
     }
 
-    public findAll() {
-        return `This action returns all users`
+    /**
+     * Returns all users.
+     * @param {number} take The number of users to return.
+     * @param {number} skip The number of users to skip.
+     * @returns {Promise<User[]>} An array of users.
+     */
+    public async findAll(take: number, skip: number): Promise<User[]> {
+        const users = await this.usersRepository.find({
+            take,
+            skip,
+        })
+        return users
     }
 
     public findOne(id: number) {

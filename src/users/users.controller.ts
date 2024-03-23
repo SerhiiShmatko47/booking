@@ -8,6 +8,7 @@ import {
     Delete,
     HttpStatus,
     HttpCode,
+    Query,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
@@ -50,8 +51,8 @@ export class UsersController {
     }
 
     @Get()
-    public findAll() {
-        return this.usersService.findAll()
+    public findAll(@Query('take') cursor: number, @Query('skip') skip: number) {
+        return this.usersService.findAll(cursor, skip)
     }
 
     @Get(':id')
