@@ -5,7 +5,8 @@ import {
     NestFastifyApplication,
 } from '@nestjs/platform-fastify'
 import { ConfigService } from '@nestjs/config'
-import { IConfiguration } from './config/configuration'
+import { IConfiguration } from '@config/configuration'
+import { Logger } from '@nestjs/common'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -13,8 +14,11 @@ async function bootstrap() {
         new FastifyAdapter(),
     )
     const configService = app.get(ConfigService<IConfiguration>)
+    const logger = new Logger(bootstrap.name)
     const port = configService.get('PORT', { infer: true })
     const host = configService.get('HOST', { infer: true })
-    await app.listen(port, host)
+    await app.listen(port, host, () =>
+        logger.log(`Listening on ${host}:${port}`),
+    )
 }
 bootstrap()
