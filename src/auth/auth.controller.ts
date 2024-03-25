@@ -8,6 +8,7 @@ import {
     ApiOperation,
     ApiTags,
 } from '@nestjs/swagger'
+import { SignUpUserDto } from './dto/signup-user.dto'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -39,5 +40,32 @@ export class AuthController {
     @HttpCode(HttpStatus.CREATED)
     public async login(@Body() loginUserDto: LoginUserDto) {
         return this.authService.login(loginUserDto)
+    }
+
+    @ApiOperation({ summary: 'Sign up user' })
+    @ApiBody({
+        type: SignUpUserDto,
+    })
+    @ApiCreatedResponse({
+        status: HttpStatus.CREATED,
+        description: 'The generated token for the user',
+        schema: {
+            example: {
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'User exists',
+            },
+        },
+    })
+    @Post('signup')
+    @HttpCode(HttpStatus.CREATED)
+    public async signup(@Body() signUpUserDto: SignUpUserDto) {
+        return this.authService.signup(signUpUserDto)
     }
 }

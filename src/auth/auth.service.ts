@@ -51,6 +51,7 @@ export class AuthService {
             phone: user.phone,
             id: user.id,
             name: user.name,
+            role: user.role,
         })
         return { token }
     }
