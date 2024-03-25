@@ -21,6 +21,9 @@
       "@users/*": [
         "./src/users/*"
       ],
+      "@auth/*": [
+        "./src/auth/*"
+      ],
       "@config/*": [
         "./src/config/*"
       ],

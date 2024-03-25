@@ -1,4 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import {
+    Body,
+    Controller,
+    HttpCode,
+    HttpStatus,
+    Post,
+    UsePipes,
+} from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { LoginUserDto } from './dto/login-user.dto'
 import {
@@ -9,6 +16,7 @@ import {
     ApiTags,
 } from '@nestjs/swagger'
 import { SignUpUserDto } from './dto/signup-user.dto'
+import { UserValidationPipe } from '@common/pipe/user-validation'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -37,6 +45,7 @@ export class AuthController {
         },
     })
     @Post('login')
+    @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     public async login(@Body() loginUserDto: LoginUserDto) {
         return this.authService.login(loginUserDto)
@@ -64,6 +73,7 @@ export class AuthController {
         },
     })
     @Post('signup')
+    @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     public async signup(@Body() signUpUserDto: SignUpUserDto) {
         return this.authService.signup(signUpUserDto)

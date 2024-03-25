@@ -28,9 +28,8 @@ import {
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity'
 import { Message } from '@common/types/message.types'
-import { CreateUserPipe } from '@common/pipe/create-user'
-import { UpdateUserPipe } from '@common/pipe/update-user'
 import { GetUsersPipe } from '@common/pipe/get-users'
+import { UserValidationPipe } from '@common/pipe/user-validation'
 
 @ApiTags('users')
 @Controller('users')
@@ -54,8 +53,8 @@ export class UsersController {
         },
     })
     @Post()
+    @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
-    @UsePipes(new CreateUserPipe())
     @UseInterceptors(ClassSerializerInterceptor)
     public async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         return this.usersService.create(createUserDto)
@@ -140,7 +139,7 @@ export class UsersController {
         },
     })
     @Patch(':userId')
-    @UsePipes(new UpdateUserPipe())
+    @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     public async update(
         @Param('userId') userId: string,

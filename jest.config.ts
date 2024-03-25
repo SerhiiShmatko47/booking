@@ -5,6 +5,7 @@ const jestConfig: JestConfigWithTsJest = {
     moduleNameMapper: {
         '^@common/(.*)$': '<rootDir>/src/common/$1',
         '^@users/(.*)$': '<rootDir>/src/users/$1',
+        '^@auth/(.*)$': '<rootDir>/src/auth/$1',
     },
     rootDir: '.',
     testRegex: '.*\\.spec\\.ts$',
