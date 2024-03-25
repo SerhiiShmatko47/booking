@@ -6,6 +6,7 @@ import { User } from './entities/user.entity'
 import * as bcrypt from 'bcryptjs'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Message } from '@common/types/message.types'
+import { Role } from '@common/enums/role.enum'
 
 @Injectable()
 export class UsersService {
@@ -20,7 +21,10 @@ export class UsersService {
      * @return {Promise<User>} The newly created user.
      * @throws {HttpException} If the user already exists.
      */
-    public async create(createUserDto: CreateUserDto): Promise<User> {
+    public async create(
+        createUserDto: CreateUserDto,
+        role: Role = Role.USER,
+    ): Promise<User> {
         const user = await this.usersRepository.findOne({
             where: { phone: createUserDto.phone },
         })
@@ -34,6 +38,7 @@ export class UsersService {
             ...createUserDto,
             password: hashPassword,
             createdAt: new Date(),
+            role,
         })
         return this.usersRepository.save(newUser)
     }
