@@ -15,12 +15,12 @@ export class UsersService {
     ) {}
 
     /**
-     * Creates a new user.
-     * @param {CreateUserDto} createUserDto Data used to create the user.
-     * @returns {Promise<Message>} A message indicating the user was created successfully.
+     * Creates a new user with the given data.
+     * @param {CreateUserDto} createUserDto - The data of the user to be created.
+     * @return {Promise<User>} The newly created user.
      * @throws {HttpException} If the user already exists.
      */
-    public async create(createUserDto: CreateUserDto): Promise<Message> {
+    public async create(createUserDto: CreateUserDto): Promise<User> {
         const user = await this.usersRepository.findOne({
             where: { phone: createUserDto.phone },
         })
@@ -35,8 +35,7 @@ export class UsersService {
             password: hashPassword,
             createdAt: new Date(),
         })
-        await this.usersRepository.save(newUser)
-        return { message: 'User created successfully' }
+        return this.usersRepository.save(newUser)
     }
 
     /**
@@ -99,5 +98,14 @@ export class UsersService {
             throw new HttpException('User not found', HttpStatus.BAD_REQUEST)
         await this.usersRepository.delete({ id: userId })
         return { message: 'User deleted successfully' }
+    }
+
+    /**
+     * Retrieves a user by their phone number.
+     * @param {string} phone - The phone number of the user.
+     * @return {Promise<User>} A promise that resolves to the user object.
+     */
+    public async getByPhone(phone: string): Promise<User> {
+        return this.usersRepository.findOne({ where: { phone } })
     }
 }

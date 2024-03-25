@@ -20,11 +20,6 @@ export class User {
     @Column()
     name: string
 
-    @ApiProperty({
-        type: String,
-        example: 'qwerty1234',
-        description: 'user password',
-    })
     @Exclude()
     @Column()
     password: string

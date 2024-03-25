@@ -1,4 +1,7 @@
 import * as Joi from 'joi'
+import { config } from 'dotenv'
+
+config()
 
 export interface IConfiguration {
     PORT: number
@@ -9,6 +12,8 @@ export interface IConfiguration {
     POSTGRES_HOST: string
     POSTGRES_DATABASE: string
 }
+
+export const JWT_SECRET = process.env.JWT_SECRET
 
 export const ConfigurationSchema = Joi.object({
     PORT: Joi.number().default(3000),

@@ -34,16 +34,17 @@ describe('UsersController', () => {
                 name: 'John',
                 password: 'password',
             }
-            const expectedMessage: Message = {
-                message: 'User created successfully',
+            const user: User = {
+                ...createUserDto,
+                id: '1',
+                createdAt: new Date(),
             }
-            jest.spyOn(usersService, 'create').mockResolvedValue(
-                expectedMessage,
-            )
+
+            jest.spyOn(usersService, 'create').mockResolvedValue(user)
 
             const result = await usersController.create(createUserDto)
 
-            expect(result).toEqual(expectedMessage)
+            expect(result).toEqual(user)
             expect(usersService.create).toHaveBeenCalledWith(createUserDto)
         })
 

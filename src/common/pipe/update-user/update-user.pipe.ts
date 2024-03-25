@@ -1,4 +1,4 @@
-import { UpdateUserDto } from '@/users/dto/update-user.dto'
+import { UpdateUserDto } from '@users/dto/update-user.dto'
 import {
     ArgumentMetadata,
     BadRequestException,

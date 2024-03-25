@@ -4,7 +4,7 @@ import {
     Injectable,
     PipeTransform,
 } from '@nestjs/common'
-import { CreateUserDto } from '@/users/dto/create-user.dto'
+import { CreateUserDto } from '@users/dto/create-user.dto'
 import { plainToInstance } from 'class-transformer'
 import { validate } from 'class-validator'
 

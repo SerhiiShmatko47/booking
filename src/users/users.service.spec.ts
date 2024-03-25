@@ -6,7 +6,6 @@ import { HttpException, HttpStatus } from '@nestjs/common'
 import * as bcrypt from 'bcryptjs'
 import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
-import { Message } from '@common/types/message.types'
 import { UpdateUserDto } from './dto/update-user.dto'
 
 describe('UsersService', () => {
@@ -36,19 +35,16 @@ describe('UsersService', () => {
                 password: 'password',
             }
             const hashPassword = 'hashedPassword'
-            jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashPassword as never)
-            jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
-            jest.spyOn(usersRepository, 'create').mockReturnValue({
+            const result: User = {
                 ...createUserDto,
                 id: '1',
                 password: hashPassword,
                 createdAt: new Date(),
-            })
-            jest.spyOn(usersRepository, 'save').mockResolvedValue(undefined)
-
-            const result: Message = {
-                message: 'User created successfully',
             }
+            jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashPassword as never)
+            jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
+            jest.spyOn(usersRepository, 'create').mockReturnValue(result)
+            jest.spyOn(usersRepository, 'save').mockResolvedValue(result)
 
             expect(await usersService.create(createUserDto)).toEqual(result)
         })

@@ -24,13 +24,15 @@ import {
     ApiOperation,
     ApiParam,
     ApiQuery,
+    ApiTags,
 } from '@nestjs/swagger'
 import { User } from './entities/user.entity'
 import { Message } from '@common/types/message.types'
-import { CreateUserPipe } from '@common/pipe/create-user/create-user.pipe'
-import { UpdateUserPipe } from '@common/pipe/update-user/update-user.pipe'
-import { GetUsersPipe } from '@common/pipe/get-users/get-users.pipe'
+import { CreateUserPipe } from '@common/pipe/create-user'
+import { UpdateUserPipe } from '@common/pipe/update-user'
+import { GetUsersPipe } from '@common/pipe/get-users'
 
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
@@ -41,11 +43,7 @@ export class UsersController {
     })
     @ApiCreatedResponse({
         status: HttpStatus.CREATED,
-        schema: {
-            example: {
-                message: 'User created',
-            },
-        },
+        type: User,
     })
     @ApiBadRequestResponse({
         status: HttpStatus.BAD_REQUEST,
@@ -58,9 +56,8 @@ export class UsersController {
     @Post()
     @HttpCode(HttpStatus.CREATED)
     @UsePipes(new CreateUserPipe())
-    public async create(
-        @Body() createUserDto: CreateUserDto,
-    ): Promise<Message> {
+    @UseInterceptors(ClassSerializerInterceptor)
+    public async create(@Body() createUserDto: CreateUserDto): Promise<User> {
         return this.usersService.create(createUserDto)
     }
 
