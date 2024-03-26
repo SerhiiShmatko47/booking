@@ -7,6 +7,7 @@ import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { Role } from '@common/enums/role.enum'
+import { JwtModule } from '@nestjs/jwt'
 
 describe('UsersController', () => {
     let usersController: UsersController
@@ -14,6 +15,12 @@ describe('UsersController', () => {
 
     beforeEach(async () => {
         const app: TestingModule = await Test.createTestingModule({
+            imports: [
+                JwtModule.register({
+                    secret: 'secret',
+                    signOptions: { expiresIn: '1d' },
+                }),
+            ],
             controllers: [UsersController],
             providers: [
                 UsersService,

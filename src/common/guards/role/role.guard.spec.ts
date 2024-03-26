@@ -44,13 +44,15 @@ describe('RoleGuard', () => {
 
     it('should return true when the user has one of the required roles', () => {
         jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([Role.ADMIN])
-        context.switchToHttp().getRequest().user.roles = [Role.ADMIN]
+        jest.spyOn(Buffer, 'from').mockReturnValue(Buffer.from([]))
+        jest.spyOn(JSON, 'parse').mockReturnValue({ role: Role.ADMIN })
         expect(guard.canActivate(context)).toBe(true)
     })
 
     it('should return false when the user does not have any of the required roles', () => {
         jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([Role.ADMIN])
-        context.switchToHttp().getRequest().user.roles = [Role.USER]
+        jest.spyOn(Buffer, 'from').mockReturnValue(Buffer.from([]))
+        jest.spyOn(JSON, 'parse').mockReturnValue({ role: Role.USER })
         expect(guard.canActivate(context)).toBe(false)
     })
 })
