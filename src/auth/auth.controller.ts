@@ -18,7 +18,7 @@ import {
 import { SignUpUserDto } from './dto/signup-user.dto'
 import { UserValidationPipe } from '@common/pipe/user-validation'
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
