@@ -12,12 +12,14 @@ import {
     UsePipes,
     UseInterceptors,
     ClassSerializerInterceptor,
+    UseGuards,
 } from '@nestjs/common'
 import { UsersService } from './users.service'
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
 import {
     ApiBadRequestResponse,
+    ApiBearerAuth,
     ApiBody,
     ApiCreatedResponse,
     ApiOkResponse,
@@ -30,9 +32,13 @@ import { User } from './entities/user.entity'
 import { Message } from '@common/types/message.types'
 import { GetUsersPipe } from '@common/pipe/get-users'
 import { UserValidationPipe } from '@common/pipe/user-validation'
+import { RoleGuard } from '@common/guards/role/role.guard'
+import { Role } from '@common/enums/role.enum'
+import { Roles } from '@common/decorators/role.decorator'
 
 @ApiTags('users')
 @Controller('users')
+@UseGuards(RoleGuard)
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
@@ -52,7 +58,9 @@ export class UsersController {
             },
         },
     })
+    @ApiBearerAuth()
     @Post()
+    @Roles(Role.ADMIN)
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(ClassSerializerInterceptor)
@@ -81,7 +89,9 @@ export class UsersController {
             },
         },
     })
+    @ApiBearerAuth()
     @Get()
+    @Roles(Role.ADMIN)
     @UsePipes(new GetUsersPipe())
     @UseInterceptors(ClassSerializerInterceptor)
     public async findAll(
@@ -108,7 +118,9 @@ export class UsersController {
             },
         },
     })
+    @ApiBearerAuth()
     @Get(':userId')
+    @Roles(Role.ADMIN)
     @UseInterceptors(ClassSerializerInterceptor)
     public async findOne(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
@@ -138,7 +150,9 @@ export class UsersController {
             },
         },
     })
+    @ApiBearerAuth()
     @Patch(':userId')
+    @Roles(Role.ADMIN)
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     public async update(
@@ -169,7 +183,9 @@ export class UsersController {
             },
         },
     })
+    @ApiBearerAuth()
     @Delete(':userId')
+    @Roles(Role.ADMIN)
     public async remove(@Param('userId') userId: string): Promise<Message> {
         return this.usersService.remove(userId)
     }

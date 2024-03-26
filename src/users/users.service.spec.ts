@@ -7,6 +7,7 @@ import * as bcrypt from 'bcryptjs'
 import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { Role } from '@common/enums/role.enum'
 
 describe('UsersService', () => {
     let usersService: UsersService
@@ -40,6 +41,7 @@ describe('UsersService', () => {
                 id: '1',
                 password: hashPassword,
                 createdAt: new Date(),
+                role: Role.USER,
             }
             jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashPassword as never)
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
@@ -59,6 +61,7 @@ describe('UsersService', () => {
                 ...createUserDto,
                 id: '1',
                 createdAt: new Date(),
+                role: Role.USER,
             })
 
             await expect(usersService.create(createUserDto)).rejects.toThrow(
@@ -79,6 +82,7 @@ describe('UsersService', () => {
                 ...createUserDto,
                 password: hashPassword,
                 createdAt: new Date(),
+                role: Role.USER,
                 id: '1',
             })
             jest.spyOn(usersRepository, 'save').mockResolvedValue(undefined)
@@ -98,6 +102,7 @@ describe('UsersService', () => {
                     phone: '1234567890',
                     createdAt: new Date(),
                     password: 'password',
+                    role: Role.USER,
                 },
                 {
                     id: '2',
@@ -105,6 +110,7 @@ describe('UsersService', () => {
                     phone: '0987654321',
                     createdAt: new Date(),
                     password: 'password',
+                    role: Role.USER,
                 },
             ]
             jest.spyOn(usersRepository, 'find').mockResolvedValue(users)
@@ -130,12 +136,13 @@ describe('UsersService', () => {
     describe('findOne', () => {
         it('should return the user when it is found', async () => {
             const userId = '123'
-            const user = {
+            const user: User = {
                 id: userId,
                 name: 'John Doe',
                 phone: '1234567890',
                 createdAt: new Date(),
                 password: 'password',
+                role: Role.USER,
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
 
@@ -168,6 +175,7 @@ describe('UsersService', () => {
                 name: 'John',
                 createdAt: new Date(),
                 password: 'password',
+                role: Role.USER,
             })
             jest.spyOn(usersRepository, 'update').mockResolvedValue(undefined)
 
@@ -215,12 +223,13 @@ describe('UsersService', () => {
 
         it('should delete the user with the specified ID from the repository', async () => {
             const userId = 'existing-user-id'
-            const user = {
+            const user: User = {
                 id: userId,
                 name: 'John',
                 phone: '1234567890',
                 password: 'password',
                 createdAt: new Date(),
+                role: Role.USER,
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
             jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)
@@ -232,12 +241,13 @@ describe('UsersService', () => {
 
         it('should return an object with a message property set to "User deleted successfully"', async () => {
             const userId = 'existing-user-id'
-            const user = {
+            const user: User = {
                 id: userId,
                 name: 'John',
                 phone: '1234567890',
                 password: 'password',
                 createdAt: new Date(),
+                role: Role.USER,
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
             jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)

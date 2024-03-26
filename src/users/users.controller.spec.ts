@@ -6,6 +6,7 @@ import { Message } from '@common/types/message.types'
 import { User } from './entities/user.entity'
 import { getRepositoryToken } from '@nestjs/typeorm'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { Role } from '@common/enums/role.enum'
 
 describe('UsersController', () => {
     let usersController: UsersController
@@ -38,6 +39,7 @@ describe('UsersController', () => {
                 ...createUserDto,
                 id: '1',
                 createdAt: new Date(),
+                role: Role.USER,
             }
 
             jest.spyOn(usersService, 'create').mockResolvedValue(user)
@@ -74,6 +76,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '1234567890',
+                    role: Role.USER,
                 },
                 {
                     id: '2',
@@ -81,6 +84,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '0987654321',
+                    role: Role.USER,
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue(users)
@@ -108,6 +112,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '1234567890',
+                    role: Role.USER,
                 },
                 {
                     id: '2',
@@ -115,6 +120,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '0987654321',
+                    role: Role.USER,
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue([users[0]])
@@ -133,6 +139,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '1234567890',
+                    role: Role.USER,
                 },
                 {
                     id: '2',
@@ -140,6 +147,7 @@ describe('UsersController', () => {
                     createdAt: new Date(),
                     password: 'password',
                     phone: '0987654321',
+                    role: Role.USER,
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue([users[0]])
@@ -153,12 +161,13 @@ describe('UsersController', () => {
     describe('findOne', () => {
         it('should return a user when a valid userId is provided', async () => {
             const userId = 'validUserId'
-            const user = {
+            const user: User = {
                 id: userId,
                 name: 'John Doe',
                 phone: '1234567890',
                 password: 'password',
                 createdAt: new Date(),
+                role: Role.USER,
             }
             jest.spyOn(usersService, 'findOne').mockResolvedValue(user)
 
