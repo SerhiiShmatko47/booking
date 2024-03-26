@@ -23,6 +23,8 @@ async function bootstrap() {
     )
 
     app.enableCors()
+    app.setGlobalPrefix('api')
+
     await app.register(compression, { encodings: ['gzip', 'deflate'] })
     await app.register(helmet, {
         contentSecurityPolicy: false,
