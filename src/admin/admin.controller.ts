@@ -37,14 +37,14 @@ import { Role } from '@common/enums/role.enum'
 import { AuthGuard } from '@common/guards/auth/auth.guard'
 import { RoleGuard } from '@common/guards/role/role.guard'
 
-@ApiTags('admin')
+@ApiTags('Admin')
 @Controller('admin')
 @Roles(Role.ADMIN)
 @UseGuards(AuthGuard, RoleGuard)
 export class AdminController {
     constructor(private readonly usersService: UsersService) {}
 
-    @ApiOperation({ summary: 'Create user' })
+    @ApiOperation({ summary: 'Create admin' })
     @ApiBody({
         type: CreateUserDto,
     })
@@ -61,12 +61,12 @@ export class AdminController {
         },
     })
     @ApiBearerAuth()
-    @Post()
+    @Post('users')
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(ClassSerializerInterceptor)
     public async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-        return this.usersService.create(createUserDto)
+        return this.usersService.create(createUserDto, Role.ADMIN)
     }
 
     @ApiOperation({ summary: 'Get all user' })
@@ -91,7 +91,7 @@ export class AdminController {
         },
     })
     @ApiBearerAuth()
-    @Get()
+    @Get('users')
     @UsePipes(new GetUsersPipe())
     @UseInterceptors(ClassSerializerInterceptor)
     public async findAll(
@@ -119,7 +119,7 @@ export class AdminController {
         },
     })
     @ApiBearerAuth()
-    @Get(':userId')
+    @Get('users/:userId')
     @UseInterceptors(ClassSerializerInterceptor)
     public async findOne(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
@@ -150,7 +150,7 @@ export class AdminController {
         },
     })
     @ApiBearerAuth()
-    @Patch(':userId')
+    @Patch('users/:userId')
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     public async update(
@@ -182,7 +182,7 @@ export class AdminController {
         },
     })
     @ApiBearerAuth()
-    @Delete(':userId')
+    @Delete('users/:userId')
     public async remove(@Param('userId') userId: string): Promise<Message> {
         return this.usersService.remove(userId)
     }

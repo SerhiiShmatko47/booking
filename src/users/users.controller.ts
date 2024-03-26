@@ -28,7 +28,7 @@ import { AuthGuard } from '@common/guards/auth/auth.guard'
 import { UserContextInterceptor } from '@common/interceptors/user-context'
 import { UserContext } from '@common/decorators/user-context.decorator'
 
-@ApiTags('users')
+@ApiTags('Users')
 @Controller('users')
 @UseGuards(AuthGuard)
 @UseInterceptors(UserContextInterceptor)
