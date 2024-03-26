@@ -6,6 +6,7 @@ const jestConfig: JestConfigWithTsJest = {
         '^@common/(.*)$': '<rootDir>/src/common/$1',
         '^@users/(.*)$': '<rootDir>/src/users/$1',
         '^@auth/(.*)$': '<rootDir>/src/auth/$1',
+        '^@apartments/(.*)$': '<rootDir>/src/apartments/$1',
     },
     rootDir: '.',
     testRegex: '.*\\.spec\\.ts$',

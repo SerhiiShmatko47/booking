@@ -30,6 +30,9 @@
       "@common/*": [
         "./src/common/*"
       ],
+      "@apartments/*": [
+        "./src/apartments/*"
+      ],
     }
   }
 }

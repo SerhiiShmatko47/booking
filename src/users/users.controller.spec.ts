@@ -44,6 +44,7 @@ describe('UsersController', () => {
                 password: 'password',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(usersService, 'findOne').mockResolvedValue(user)
 

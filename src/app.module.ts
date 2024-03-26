@@ -6,6 +6,7 @@ import { typeormConfig } from '@config/orm.config'
 import { UsersModule } from './users/users.module'
 import { AuthModule } from './auth/auth.module'
 import { AdminModule } from './admin/admin.module'
+import { ApartmentsModule } from './apartments/apartments.module'
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { AdminModule } from './admin/admin.module'
         UsersModule,
         AuthModule,
         AdminModule,
+        ApartmentsModule,
     ],
 })
 export class AppModule {}

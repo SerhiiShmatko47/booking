@@ -49,6 +49,7 @@ describe('AuthService', () => {
                 name: 'John',
                 role: Role.USER,
                 createdAt: new Date(),
+                apartments: [],
             }
             jest.spyOn(usersService, 'getByPhone').mockResolvedValue(user)
 
@@ -69,6 +70,7 @@ describe('AuthService', () => {
                 name: 'John',
                 role: Role.USER,
                 createdAt: new Date(),
+                apartments: [],
             }
             jest.spyOn(usersService, 'getByPhone').mockResolvedValue(user)
             jest.spyOn(bcrypt as any, 'compare').mockResolvedValue(true)
@@ -104,6 +106,7 @@ describe('AuthService', () => {
                 ...signupUserDto,
                 role: Role.USER,
                 createdAt: new Date(),
+                apartments: [],
             })
             jest.spyOn(authService as any, 'generateToken').mockReturnValue({
                 token: 'token',

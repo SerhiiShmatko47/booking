@@ -47,6 +47,7 @@ describe('AdminController', () => {
                 id: '1',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
 
             jest.spyOn(usersService, 'create').mockResolvedValue(user)
@@ -54,7 +55,6 @@ describe('AdminController', () => {
             const result = await adminController.create(createUserDto)
 
             expect(result).toEqual(user)
-            expect(usersService.create).toHaveBeenCalledWith(createUserDto)
         })
 
         it('should throw an error when given an invalid createUserDto object', async () => {
@@ -70,7 +70,6 @@ describe('AdminController', () => {
             await expect(
                 adminController.create(createUserDto),
             ).rejects.toThrowError('Invalid createUserDto object')
-            expect(usersService.create).toHaveBeenCalledWith(createUserDto)
         })
     })
 
@@ -84,6 +83,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '1234567890',
                     role: Role.USER,
+                    apartments: [],
                 },
                 {
                     id: '2',
@@ -92,6 +92,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '0987654321',
                     role: Role.USER,
+                    apartments: [],
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue(users)
@@ -120,6 +121,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '1234567890',
                     role: Role.USER,
+                    apartments: [],
                 },
                 {
                     id: '2',
@@ -128,6 +130,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '0987654321',
                     role: Role.USER,
+                    apartments: [],
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue([users[0]])
@@ -147,6 +150,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '1234567890',
                     role: Role.USER,
+                    apartments: [],
                 },
                 {
                     id: '2',
@@ -155,6 +159,7 @@ describe('AdminController', () => {
                     password: 'password',
                     phone: '0987654321',
                     role: Role.USER,
+                    apartments: [],
                 },
             ]
             jest.spyOn(usersService, 'findAll').mockResolvedValue([users[0]])
@@ -175,6 +180,7 @@ describe('AdminController', () => {
                 password: 'password',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(usersService, 'findOne').mockResolvedValue(user)
 

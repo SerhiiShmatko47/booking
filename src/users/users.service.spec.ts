@@ -42,6 +42,7 @@ describe('UsersService', () => {
                 password: hashPassword,
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(bcrypt, 'hash').mockResolvedValue(hashPassword as never)
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(undefined)
@@ -62,6 +63,7 @@ describe('UsersService', () => {
                 id: '1',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             })
 
             await expect(usersService.create(createUserDto)).rejects.toThrow(
@@ -84,6 +86,7 @@ describe('UsersService', () => {
                 createdAt: new Date(),
                 role: Role.USER,
                 id: '1',
+                apartments: [],
             })
             jest.spyOn(usersRepository, 'save').mockResolvedValue(undefined)
 
@@ -103,6 +106,7 @@ describe('UsersService', () => {
                     createdAt: new Date(),
                     password: 'password',
                     role: Role.USER,
+                    apartments: [],
                 },
                 {
                     id: '2',
@@ -111,6 +115,7 @@ describe('UsersService', () => {
                     createdAt: new Date(),
                     password: 'password',
                     role: Role.USER,
+                    apartments: [],
                 },
             ]
             jest.spyOn(usersRepository, 'find').mockResolvedValue(users)
@@ -143,6 +148,7 @@ describe('UsersService', () => {
                 createdAt: new Date(),
                 password: 'password',
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
 
@@ -176,6 +182,7 @@ describe('UsersService', () => {
                 createdAt: new Date(),
                 password: 'password',
                 role: Role.USER,
+                apartments: [],
             })
             jest.spyOn(usersRepository, 'update').mockResolvedValue(undefined)
 
@@ -230,6 +237,7 @@ describe('UsersService', () => {
                 password: 'password',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
             jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)
@@ -248,6 +256,7 @@ describe('UsersService', () => {
                 password: 'password',
                 createdAt: new Date(),
                 role: Role.USER,
+                apartments: [],
             }
             jest.spyOn(usersRepository, 'findOne').mockResolvedValue(user)
             jest.spyOn(usersRepository, 'delete').mockResolvedValue(undefined)

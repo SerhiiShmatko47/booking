@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 import { Exclude } from 'class-transformer'
 import { Role } from '@common/enums/role.enum'
+import { Apartment } from '@apartments/entities/apartment.entity'
 
 @Entity('users')
 export class User {
@@ -32,4 +33,10 @@ export class User {
     @ApiProperty({ type: Date, example: '2022-01-01T00:00:00.000Z' })
     @Column({ name: 'created_at' })
     createdAt: Date
+
+    @ApiProperty({ type: () => [Apartment], description: 'apartments' })
+    @OneToMany(() => Apartment, (apartment) => apartment.currentOwner, {
+        nullable: true,
+    })
+    apartments?: Apartment[]
 }
