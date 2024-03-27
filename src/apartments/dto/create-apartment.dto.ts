@@ -21,5 +21,5 @@ export class CreateApartmentDto {
         description: 'The type of the apartment',
         enum: Object.values(ApartmentsType),
     })
-    public readonly apartmentsType: ApartmentsType
+    public readonly type: ApartmentsType
 }

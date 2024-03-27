@@ -49,10 +49,6 @@ export class Apartment {
     @Column({ type: 'date', nullable: true })
     leaseEndDate?: Date
 
-    @ApiProperty({
-        type: () => User,
-        description: 'apartment current owner',
-    })
     @ManyToOne(() => User, (user) => user.apartments, { nullable: true })
     currentOwner?: User
 }

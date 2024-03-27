@@ -36,13 +36,19 @@ import { Roles } from '@common/decorators/role.decorator'
 import { Role } from '@common/enums/role.enum'
 import { AuthGuard } from '@common/guards/auth/auth.guard'
 import { RoleGuard } from '@common/guards/role/role.guard'
+import { ApartmentsService } from '@apartments/apartments.service'
+import { CreateApartmentDto } from '@apartments/dto/create-apartment.dto'
+import { UpdateApartmentDto } from '@apartments/dto/update-apartment.dto'
 
 @ApiTags('Admin')
 @Controller('admin')
 @Roles(Role.ADMIN)
 @UseGuards(AuthGuard, RoleGuard)
 export class AdminController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(
+        private readonly usersService: UsersService,
+        private readonly apartmnetsService: ApartmentsService,
+    ) {}
 
     @ApiOperation({ summary: 'Create admin' })
     @ApiBody({
@@ -65,7 +71,9 @@ export class AdminController {
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
     @UseInterceptors(ClassSerializerInterceptor)
-    public async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    public async createAdmin(
+        @Body() createUserDto: CreateUserDto,
+    ): Promise<User> {
         return this.usersService.create(createUserDto, Role.ADMIN)
     }
 
@@ -94,7 +102,7 @@ export class AdminController {
     @Get('users')
     @UsePipes(new GetUsersPipe())
     @UseInterceptors(ClassSerializerInterceptor)
-    public async findAll(
+    public async findAllUsers(
         @Query('take') take: number,
         @Query('skip') skip: number,
     ): Promise<User[]> {
@@ -121,7 +129,7 @@ export class AdminController {
     @ApiBearerAuth()
     @Get('users/:userId')
     @UseInterceptors(ClassSerializerInterceptor)
-    public async findOne(@Param('userId') userId: string): Promise<User> {
+    public async findOneUser(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
     }
 
@@ -153,7 +161,7 @@ export class AdminController {
     @Patch('users/:userId')
     @UsePipes(new UserValidationPipe())
     @HttpCode(HttpStatus.CREATED)
-    public async update(
+    public async updateUser(
         @Param('userId') userId: string,
         @Body() updateUserDto: UpdateUserDto,
     ): Promise<Message> {
@@ -183,7 +191,99 @@ export class AdminController {
     })
     @ApiBearerAuth()
     @Delete('users/:userId')
-    public async remove(@Param('userId') userId: string): Promise<Message> {
+    public async removeUser(@Param('userId') userId: string): Promise<Message> {
         return this.usersService.remove(userId)
+    }
+
+    @ApiOperation({ summary: 'Create apartment' })
+    @ApiBody({
+        type: CreateApartmentDto,
+        description: 'Apartment object',
+    })
+    @ApiCreatedResponse({
+        status: HttpStatus.CREATED,
+        schema: {
+            example: {
+                message: 'Apartment created',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'Apartment already exists',
+            },
+        },
+    })
+    @ApiBearerAuth()
+    @Post('apartments')
+    @HttpCode(HttpStatus.CREATED)
+    public async createApartment(
+        @Body() createApartmentDto: CreateApartmentDto,
+    ): Promise<Message> {
+        return this.apartmnetsService.create(createApartmentDto)
+    }
+
+    @ApiOperation({ summary: 'Update apartment by id' })
+    @ApiParam({
+        type: String,
+        name: 'apartmentId',
+    })
+    @ApiBody({
+        type: UpdateApartmentDto,
+        description: 'Apartment object',
+    })
+    @ApiCreatedResponse({
+        status: HttpStatus.CREATED,
+        schema: {
+            example: {
+                message: 'Apartment updated',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'Apartment does not exist',
+            },
+        },
+    })
+    @ApiBearerAuth()
+    @Patch('apartments/:apartmentId')
+    @HttpCode(HttpStatus.CREATED)
+    public async updateApartment(
+        @Param('apartmentId') id: string,
+        @Body() updateApartmentDto: UpdateApartmentDto,
+    ): Promise<Message> {
+        return this.apartmnetsService.update(id, updateApartmentDto)
+    }
+
+    @ApiOperation({ summary: 'Delete apartment by id' })
+    @ApiParam({
+        type: String,
+        name: 'apartmentId',
+    })
+    @ApiCreatedResponse({
+        status: HttpStatus.OK,
+        schema: {
+            example: {
+                message: 'Apartment deleted',
+            },
+        },
+    })
+    @ApiBadRequestResponse({
+        status: HttpStatus.BAD_REQUEST,
+        schema: {
+            example: {
+                message: 'Apartment does not exist',
+            },
+        },
+    })
+    @ApiBearerAuth()
+    @Delete('apartments/:apartmentId')
+    public async removeApartment(@Param('apartmentId') id: string) {
+        return this.apartmnetsService.remove(id)
     }
 }

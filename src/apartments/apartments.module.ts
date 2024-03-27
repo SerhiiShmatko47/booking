@@ -8,5 +8,6 @@ import { Apartment } from './entities/apartment.entity'
     imports: [TypeOrmModule.forFeature([Apartment])],
     controllers: [ApartmentsController],
     providers: [ApartmentsService],
+    exports: [ApartmentsService],
 })
 export class ApartmentsModule {}

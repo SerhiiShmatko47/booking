@@ -33,7 +33,7 @@ describe('ApartmentsService', () => {
             const createApartmentDto: CreateApartmentDto = {
                 sequenceNumber: 1,
                 isOccupied: false,
-                apartmentsType: ApartmentsType.studio,
+                type: ApartmentsType.studio,
             }
             jest.spyOn(apartmentsRepository, 'findOne').mockReturnValue(
                 undefined,
@@ -52,7 +52,7 @@ describe('ApartmentsService', () => {
             const createApartmentDto: CreateApartmentDto = {
                 sequenceNumber: 1,
                 isOccupied: false,
-                apartmentsType: ApartmentsType.studio,
+                type: ApartmentsType.studio,
             }
             jest.spyOn(apartmentsRepository, 'findOne').mockReturnValue(
                 {} as Promise<Apartment>,
@@ -110,7 +110,7 @@ describe('ApartmentsService', () => {
             const updateApartmentDto: CreateApartmentDto = {
                 sequenceNumber: 1,
                 isOccupied: false,
-                apartmentsType: ApartmentsType.studio,
+                type: ApartmentsType.studio,
             }
             jest.spyOn(apartmentsRepository, 'findOne').mockResolvedValue(
                 new Apartment() as never,
@@ -132,7 +132,7 @@ describe('ApartmentsService', () => {
             const updateApartmentDto: CreateApartmentDto = {
                 sequenceNumber: 1,
                 isOccupied: false,
-                apartmentsType: ApartmentsType.studio,
+                type: ApartmentsType.studio,
             }
             jest.spyOn(apartmentsRepository, 'findOne').mockResolvedValue(null)
             await expect(
