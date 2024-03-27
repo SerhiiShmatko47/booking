@@ -18,7 +18,7 @@ export const typeormConfig: DataSourceOptions = {
     },
     type: 'postgres',
     entities: ['dist/**/*.entity.{js,ts}'],
-    migrations: ['dist/migrations/*.{ts,js}'],
+    migrations: ['dist/src/migrations/*.{ts,js}'],
     migrationsRun: true,
     // logging: true,
 }
