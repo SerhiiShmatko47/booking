@@ -33,6 +33,9 @@
       "@apartments/*": [
         "./src/apartments/*"
       ],
+      "@booking/*": [
+        "./src/booking/*"
+      ],
     }
   }
 }

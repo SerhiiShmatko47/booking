@@ -43,8 +43,7 @@ export class BookingService {
         apartment.isOccupied = true
         user.apartments.push(apartment)
 
-        await this.apartmentsRepository.save(apartment)
-        await this.usersRepository.save(user)
+        await this.saveApartmentAndUserWithTransaction(apartment, user)
 
         return { message: 'Apartment reserved successfully' }
     }
@@ -80,8 +79,7 @@ export class BookingService {
             (apartment) => apartment.id !== apartmentId,
         )
 
-        await this.apartmentsRepository.save(apartment)
-        await this.usersRepository.save(user)
+        await this.saveApartmentAndUserWithTransaction(apartment, user)
 
         return { message: 'Apartment unreserved successfully' }
     }
@@ -120,5 +118,23 @@ export class BookingService {
         })
         if (!user) throw new BadRequestException('User does not exist')
         return [apartment, user]
+    }
+
+    /**
+     * Saves an apartment and a user within a transaction.
+     * @param {Apartment} apartment - The apartment object to be saved.
+     * @param {User} user - The user object to be saved.
+     * @return {Promise<void>} A promise that resolves when the save operation is complete.
+     */
+    private async saveApartmentAndUserWithTransaction(
+        apartment: Apartment,
+        user: User,
+    ): Promise<void> {
+        return this.apartmentsRepository.manager.transaction(
+            async (entityManager) => {
+                await entityManager.save(Apartment, apartment)
+                await entityManager.save(User, user)
+            },
+        )
     }
 }
