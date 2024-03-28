@@ -15,6 +15,7 @@ import {
     SwaggerDocumentOptions,
     SwaggerModule,
 } from '@nestjs/swagger'
+import { JwtExpiredFilter } from '@common/filters/jwt-expired/jwt-expired.filter'
 
 async function bootstrap() {
     const app = await NestFactory.create<NestFastifyApplication>(
@@ -24,6 +25,7 @@ async function bootstrap() {
 
     app.enableCors()
     app.setGlobalPrefix('api')
+    app.useGlobalFilters(new JwtExpiredFilter())
 
     await app.register(compression, { encodings: ['gzip', 'deflate'] })
     await app.register(helmet, {
