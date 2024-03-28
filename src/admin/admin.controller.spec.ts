@@ -15,6 +15,7 @@ import { CreateApartmentDto } from '@apartments/dto/create-apartment.dto'
 import { ApartmentsType } from '@common/enums/apartments.enum'
 import { BadRequestException, NotFoundException } from '@nestjs/common'
 import { UpdateApartmentDto } from '@apartments/dto/update-apartment.dto'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('AdminController', () => {
     let adminController: AdminController
@@ -28,6 +29,7 @@ describe('AdminController', () => {
                     secret: 'secret',
                     signOptions: { expiresIn: '1d' },
                 }),
+                CacheModule.register({}),
             ],
             controllers: [AdminController],
             providers: [

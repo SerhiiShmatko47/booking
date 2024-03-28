@@ -5,6 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { Apartment } from './entities/apartment.entity'
 import { ApartmentsType } from '@common/enums/apartments.enum'
 import { User } from '@users/entities/user.entity'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('ApartmentsController', () => {
     let apartmentsController: ApartmentsController
@@ -32,6 +33,7 @@ describe('ApartmentsController', () => {
     ]
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
+            imports: [CacheModule.register({})],
             controllers: [ApartmentsController],
             providers: [
                 ApartmentsService,

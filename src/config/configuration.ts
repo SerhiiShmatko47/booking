@@ -11,6 +11,8 @@ export interface IConfiguration {
     POSTGRES_PORT: number
     POSTGRES_HOST: string
     POSTGRES_DATABASE: string
+    REDIS_HOST: string
+    REDIS_PORT: number
 }
 
 export const JWT_SECRET = process.env.JWT_SECRET
@@ -23,4 +25,6 @@ export const ConfigurationSchema = Joi.object({
     POSTGRES_PORT: Joi.number().default(5432),
     POSTGRES_HOST: Joi.string().default('localhost'),
     POSTGRES_DATABASE: Joi.string().required(),
+    REDIS_HOST: Joi.string().default('localhost'),
+    REDIS_PORT: Joi.number().default(6379),
 })

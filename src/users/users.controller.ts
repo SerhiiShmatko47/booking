@@ -27,6 +27,7 @@ import { UserValidationPipe } from '@common/pipe/user-validation'
 import { AuthGuard } from '@common/guards/auth/auth.guard'
 import { UserContextInterceptor } from '@common/interceptors/user-context'
 import { UserContext } from '@common/decorators/user-context.decorator'
+import { CacheInterceptor } from '@nestjs/cache-manager'
 
 @ApiTags('Users')
 @Controller('users')
@@ -50,7 +51,7 @@ export class UsersController {
     })
     @ApiBearerAuth()
     @Get()
-    @UseInterceptors(ClassSerializerInterceptor)
+    @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
     public async findOne(@UserContext('id') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
     }

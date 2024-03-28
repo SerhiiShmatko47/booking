@@ -24,6 +24,7 @@ import { Apartment } from '@apartments/entities/apartment.entity'
 import { UserContextInterceptor } from '@common/interceptors/user-context'
 import { CreateReservationDto } from './dto/create-reserve.dto'
 import { Message } from '@common/types/message.types'
+import { CacheInterceptor } from '@nestjs/cache-manager'
 
 @ApiTags('Booking')
 @Controller('booking')
@@ -46,6 +47,7 @@ export class BookingController {
     })
     @ApiBearerAuth()
     @Get()
+    @UseInterceptors(CacheInterceptor)
     public async findMyReservations(
         @UserContext('id') userId: string,
     ): Promise<Apartment[]> {

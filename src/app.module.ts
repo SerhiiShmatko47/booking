@@ -8,6 +8,8 @@ import { AuthModule } from './auth/auth.module'
 import { AdminModule } from './admin/admin.module'
 import { ApartmentsModule } from './apartments/apartments.module'
 import { BookingModule } from './booking/booking.module'
+import { CacheModule } from '@nestjs/cache-manager'
+import { RedisOptions } from '@config/redis.config'
 
 @Module({
     imports: [
@@ -18,6 +20,7 @@ import { BookingModule } from './booking/booking.module'
             cache: true,
             validationSchema: ConfigurationSchema,
         }),
+        CacheModule.registerAsync(RedisOptions),
         UsersModule,
         AuthModule,
         AdminModule,

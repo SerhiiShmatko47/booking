@@ -8,6 +8,7 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { User } from '@users/entities/user.entity'
 import { JwtModule } from '@nestjs/jwt'
 import { BadRequestException } from '@nestjs/common'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('BookingController', () => {
     let bookingController: BookingController
@@ -18,6 +19,7 @@ describe('BookingController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [
+                CacheModule.register({}),
                 JwtModule.register({
                     secret: 'secret',
                     signOptions: { expiresIn: '1d' },

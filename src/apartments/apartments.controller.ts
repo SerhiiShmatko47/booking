@@ -1,4 +1,11 @@
-import { Controller, Get, Param, HttpStatus, Query } from '@nestjs/common'
+import {
+    Controller,
+    Get,
+    Param,
+    HttpStatus,
+    Query,
+    UseInterceptors,
+} from '@nestjs/common'
 import { ApartmentsService } from './apartments.service'
 import {
     ApiBadRequestResponse,
@@ -9,9 +16,11 @@ import {
     ApiTags,
 } from '@nestjs/swagger'
 import { Apartment } from './entities/apartment.entity'
+import { CacheInterceptor } from '@nestjs/cache-manager'
 
 @ApiTags('Apartments')
 @Controller('apartments')
+@UseInterceptors(CacheInterceptor)
 export class ApartmentsController {
     constructor(private readonly apartmentsService: ApartmentsService) {}
 

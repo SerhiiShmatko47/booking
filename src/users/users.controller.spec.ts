@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm'
 import { UpdateUserDto } from './dto/update-user.dto'
 import { Role } from '@common/enums/role.enum'
 import { JwtModule } from '@nestjs/jwt'
+import { CacheModule } from '@nestjs/cache-manager'
 
 describe('UsersController', () => {
     let usersController: UsersController
@@ -19,6 +20,7 @@ describe('UsersController', () => {
                     secret: 'secret',
                     signOptions: { expiresIn: '1d' },
                 }),
+                CacheModule.register({}),
             ],
             controllers: [UsersController],
             providers: [

@@ -39,6 +39,7 @@ import { RoleGuard } from '@common/guards/role/role.guard'
 import { ApartmentsService } from '@apartments/apartments.service'
 import { CreateApartmentDto } from '@apartments/dto/create-apartment.dto'
 import { UpdateApartmentDto } from '@apartments/dto/update-apartment.dto'
+import { CacheInterceptor } from '@nestjs/cache-manager'
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -128,7 +129,7 @@ export class AdminController {
     })
     @ApiBearerAuth()
     @Get('users/:userId')
-    @UseInterceptors(ClassSerializerInterceptor)
+    @UseInterceptors(ClassSerializerInterceptor, CacheInterceptor)
     public async findOneUser(@Param('userId') userId: string): Promise<User> {
         return this.usersService.findOne(userId)
     }
