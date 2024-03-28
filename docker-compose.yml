@@ -1,0 +1,32 @@
+version: "3"
+services:
+  server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    depends_on:
+      - db
+    environment:
+      - PORT=3001
+      - HOST=0.0.0.0
+      - POSTGRES_USERNAME=administrator
+      - POSTGRES_PASSWORD=administrator
+      - POSTGRES_PORT=5432
+      - POSTGRES_HOST=db
+      - POSTGRES_DATABASE=database
+      - JWT_SECRET=secret
+    restart: always
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=database  
+      - POSTGRES_USER=administrator 
+      - POSTGRES_PASSWORD=administrator  
+    volumes:
+      - db_data:/var/lib/postgresql/data 
+  
+volumes:
+  db_data:
