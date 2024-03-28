@@ -1,0 +1,12 @@
+node_modules
+dist
+build
+.env
+.example.env
+.prettierrc
+Dockerfile
+docker-compose.yml
+.git
+.github
+README.md
+.eslintrc.js
